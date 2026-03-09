@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button slot="start" (click)="mainService.navBack()" fill="clear" mode="md" icon="arrow-back-outline"
+      style="margin-left: 8px;">
+      <ion-icon name="arrow-back-outline" style="color: #0C1E2E; font-size: 24px;"></ion-icon>
+    </ion-button>
+    <ion-title mode="ios" class="ion-text-center text-large-blue">
+      Overtime
+    </ion-title>
+    <ion-button slot="end" fill="clear" (click)="filter()">
+      <ion-icon name="filter" color="warning"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-light-grey">
+  <ion-refresher [disabled]="canRefresh" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-row style="height: 100%;">
+    <ion-col>
+      <div class="content" style="height: 100%;">
+        <div *ngIf="isSkeletonLoading">
+          <ion-row *ngFor="let p of [].constructor(5)">
+            <ion-skeleton-text animated
+              style="height: 150px; border-radius: 10px; width: 100%; margin-bottom: 10px;"></ion-skeleton-text>
+          </ion-row>
+        </div>
+
+        <ion-row *ngIf="isEmpty && !isSkeletonLoading"
+          style="height: 100%; display: flex; justify-content: center; align-items: center;">
+          <app-no-data></app-no-data>
+        </ion-row>
+
+        <div *ngIf="!isEmpty && !isSkeletonLoading">
+          <ion-row *ngFor="let p of listData;" style="display: flex; flex-direction: column;">
+            <ion-card class="card-item" (click)="goToDetail(p.dataApprovalId)" *ngIf="action == 'Request'">
+              <ion-card-header style="padding: 10px;">
+                <div style="display: flex;">
+                  <ion-col size="8" class="ion-no-padding">
+                    <ion-card-title class="text-medium">{{ p.requestNo }}</ion-card-title>
+                  </ion-col>
+                  <ion-col size="4" class="ion-no-padding ion-text-right">
+                    <ion-card-title class="text-small1-red">
+                      {{ p.requestDate | date: globalConstant.dateFormatHhMm}}
+                    </ion-card-title>
+                  </ion-col>
+                </div>
+              </ion-card-header>
+
+              <ion-card-content class="text-small1-dark-teal" style="padding: 0 10px 10px; font-weight: 400;">
+                {{p.startDate | date: globalConstant.dateFormat}} to
+                {{p.endDate | date: globalConstant.dateFormat}}
+                <br>
+                {{p.totalHoursGross}}
+                <br>
+                {{p.approverName}}
+              </ion-card-content>
+              <div class="button-container" style="justify-content: space-between !important;">
+                <div [ngClass]="p.status == 'Approved' ? 'badge-success' : p.status == 'In Progress' ? 'badge-blue'
+                      : p.status == 'Canceled' ? 'badge-warning' : 'badge-danger'">
+                  <ion-text>{{p.status}}</ion-text>
+                </div>
+                <div class="badge-yellow">
+                  <ion-text>Approval {{p.progressOverall}}</ion-text>
+                </div>
+              </div>
+            </ion-card>
+
+            <ion-card class="card-item"
+              (click)="goToDetail(action == 'Need Approval' ? p.dataApprovalId : p.dataApprovalDetailId)"
+              *ngIf="action != 'Request'">
+              <div style="display: flex; column-gap: 5px; padding: 5px;">
+                <ion-avatar class="flex-center">
+                  <img
+                    [src]="p?.employeeProfile == null || p?.employeeProfile.includes('null') ? mainService.defaultImageProfile : p?.employeeProfile"
+                    class="avatar-profile" alt="">
+                </ion-avatar>
+                <div style="display: flex; flex-direction: column; width: 100%;">
+                  <ion-card-header style="padding: 10px;">
+                    <div style="display: flex;">
+                      <ion-col size="8" class="ion-no-padding">
+                        <ion-card-title class="text-medium">{{ p.vwEmpAssignment.name }}</ion-card-title>
+                      </ion-col>
+                      <ion-col size="4" class="ion-no-padding ion-text-right">
+                        <ion-card-title class="text-small1-red">
+                          {{ p.requestDate | date: globalConstant.dateFormatHhMm}}
+                        </ion-card-title>
+                      </ion-col>
+                    </div>
+                  </ion-card-header>
+
+                  <ion-card-content class="text-small1-dark-teal" style="padding: 0 10px 10px; font-weight: 400;">
+                    {{ p.requestNo }}
+                    <br>
+                    {{ p.vwEmpAssignment.employeeNo }}
+                    <br>
+                    {{ p.vwEmpAssignment.positionName }}
+                    <br>
+                    {{p.startDate | date: globalConstant.dateFormat}} to
+                    {{p.endDate | date: globalConstant.dateFormat}}
+                    <br>
+                    {{p.totalHoursGross}}
+                    <br>
+                    {{p.approverName}}
+                  </ion-card-content>
+                </div>
+              </div>
+              <div class="button-container">
+                <div class="badge-yellow">
+                  <ion-text>Approval {{p.progressOverall}}</ion-text>
+                </div>
+              </div>
+            </ion-card>
+          </ion-row>
+          <ion-row class="load-more" *ngIf="isLoadMoreShow && !isSkeletonLoading">
+            <div *ngIf="!isSpinnerShow" style="width: 100%;">
+              <ion-button color="yellow" class="text-medium-blue ion-text-capitalize" (click)="loadMore()">
+                Load More Results
+              </ion-button>
+            </div>
+            <div size="12" *ngIf="isSpinnerShow">
+              <ion-spinner name="circles"></ion-spinner>
+            </div>
+          </ion-row>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

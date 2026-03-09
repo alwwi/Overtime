@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button slot="start" (click)="mainService.navBack()" fill="clear" mode="md" icon="arrow-back-outline"
+      style="margin-left: 8px;">
+      <ion-icon name="arrow-back-outline" style="color: #0C1E2E; font-size: 24px;"></ion-icon>
+    </ion-button>
+    <ion-title mode="ios" class="ion-text-center text-large-blue">
+      Security Group
+    </ion-title>
+    <ion-button slot="end" fill="clear" (click)="filter()">
+      <ion-icon name="filter" color="warning"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-light-grey">
+  <ion-refresher [disabled]="canRefresh" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-row style="height: 100%;">
+    <ion-col>
+      <div class="content" style="height: 100%;">
+        <div *ngIf="isSkeletonLoading">
+          <ion-row *ngFor="let p of [].constructor(5)">
+            <ion-skeleton-text animated
+              style="height: 150px; border-radius: 10px; width: 100%; margin-bottom: 10px;"></ion-skeleton-text>
+          </ion-row>
+        </div>
+
+        <ion-row *ngIf="isEmpty && !isSkeletonLoading"
+          style="height: 100%; display: flex; justify-content: center; align-items: center;">
+          <app-no-data></app-no-data>
+        </ion-row>
+
+        <div *ngIf="!isEmpty && !isSkeletonLoading">
+          <ion-row *ngFor="let p of listData;" style="display: flex; flex-direction: column;">
+            <ion-card class="card-item" (click)="goToDetail(p.id)">
+              <ion-card-header style="padding: 10px;">
+                <ion-card-title class="text-medium">{{ p.groupName }}</ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content class="text-small1-dark-teal" style="padding: 0 10px 10px; font-weight: 400;">
+                {{ p.modifiedDate | date: 'dd-MMM-y' }}
+              </ion-card-content>
+
+              <div class="button-container">
+                <ion-button color="danger" class="ion-text-capitalize text-small1-white remove-btn"
+                  (click)="$event.stopPropagation();onRemove(p)">Remove
+                  <ion-icon name="trash" slot="start"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-card>
+          </ion-row>
+        </div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="ion-text-center">
+    <ion-row>
+      <ion-col size="12">
+        <ion-button color="warning" (click)="goToDetail(null)" class="blue-button ion-text-capitalize">
+          <ion-icon name="add"></ion-icon>
+          Add Security Group
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

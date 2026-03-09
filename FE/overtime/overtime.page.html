@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar style="z-index: 0;">
+    <ion-button slot="start" (click)="mainService.navBack()" fill="clear" mode="md" icon="arrow-back-outline"
+      style="margin-left: 8px;">
+      <ion-icon name="arrow-back-outline" style="color: #0C1E2E; font-size: 24px;"></ion-icon>
+    </ion-button>
+    <ion-title mode="ios" class="ion-text-center text-large-blue">
+      Overtime
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-light-grey">
+  <ion-row style="height: 100%;">
+    <ion-col class="ion-no-padding">
+      <div [ngClass]="isAdmin ? 'isAdmin-content' : 'content'">
+        <div class="isAdmin-header" *ngIf="isAdmin">
+          <div class="card-blue card-admin">
+            <ion-skeleton-text *ngIf="isSkeletonLoading" animated style="width: 70px;height: 70px; border-radius: 50%;"
+              class="img-profile"></ion-skeleton-text>
+            <ion-avatar *ngIf="!isSkeletonLoading" class="flex-center img-profile">
+              <img
+                [src]="employee?.employeeProfile.includes('null') ? mainService.defaultImageProfile : employee?.employeeProfile"
+                class="avatar-profile" alt="">
+            </ion-avatar>
+            <ion-label *ngIf="!isSkeletonLoading" class="text-large-white"
+              style="margin-top: 15px;">{{employee?.name}}</ion-label>
+            <ion-label *ngIf="!isSkeletonLoading" class="text-medium-white">{{employee?.employeeNo}}</ion-label>
+            <ion-label *ngIf="!isSkeletonLoading"
+              class="text-medium-white ion-text-center">{{employee?.positionName}}</ion-label>
+            <ion-skeleton-text *ngIf="isSkeletonLoading" animated
+              style="width: 100px;height: 10px;"></ion-skeleton-text>
+            <ion-skeleton-text *ngIf="isSkeletonLoading" animated
+              style="width: 100px;height: 10px;"></ion-skeleton-text>
+            <ion-skeleton-text *ngIf="isSkeletonLoading" animated
+              style="width: 100px;height: 10px;"></ion-skeleton-text>
+          </div>
+        </div>
+        <form (ngSubmit)="onSubmit()" #overtimeform="ngForm" [ngClass]="isAdmin ? 'form-admin' : ''">
+          <ion-list>
+            <ion-row class="label-group">
+              <ion-label class="text-medium-red">*Required Field</ion-label>
+            </ion-row>
+
+            <ion-row style="margin-top: 10px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="startDate" id="startDate"
+                  name="startDate" readonly="true" value="{{ startDate | date: 'dd MMM yyyy HH:mm'}}" required="true" />
+                <label class="hceazy-label" for="startDate">
+                  Start Overtime<ion-text color="danger">*</ion-text>
+                </label>
+              </div>
+
+              <ion-modal id="input-date" trigger="startDate" mode="ios">
+                <ng-template>
+                  <ion-content scrollY="false" scrollX="false">
+                    <ion-row>
+                      <ion-col>
+                        <ion-datetime max="2050" style="min-width: 100%; max-height: 350px; border-radius: 10px;"
+                          mode="ios" doneText="Set" cancelText="Cancel" showDefaultButtons="true" required ngModel
+                          [(ngModel)]="startDate" (ionChange)="doCalculateOvertime()" name="startDate" hourCycle="h24"
+                          presentation="date-time">
+                        </ion-datetime>
+                      </ion-col>
+                    </ion-row>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="endDate" id="endDate"
+                  name="endDate" readonly="true" value="{{ endDate | date: 'dd MMM yyyy HH:mm'}}" required="true" />
+                <label class="hceazy-label" for="endDate">
+                  End Overtime<ion-text color="danger">*</ion-text>
+                </label>
+              </div>
+              <ion-modal id="input-date" trigger="endDate" mode="ios">
+                <ng-template>
+                  <ion-content scrollY="false" scrollX="false">
+                    <ion-row>
+                      <ion-col>
+                        <ion-datetime max="2050" style="min-width: 100%; max-height: 350px; border-radius: 10px;"
+                          mode="ios" doneText="Set" cancelText="Cancel" showDefaultButtons="true" required ngModel
+                          [(ngModel)]="endDate" (ionChange)="doCalculateOvertime()" name="endDate" hourCycle="h24"
+                          presentation="date-time" [min]="startDate">
+                        </ion-datetime>
+                      </ion-col>
+                    </ion-row>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+            </ion-row>
+
+            <ion-row class="label-group" style="margin-top: 20px;">
+              <ion-label class="text-medium">Total Hour(s) : {{totalHour}}</ion-label>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <textarea id="remark" name="remark" class="hceazy-textarea" placeholder="Remark" ngModel
+                  [(ngModel)]="remark" required="true">
+                </textarea>
+                <label class="hceazy-label" for="remark">
+                  Remark<ion-text color="danger">*</ion-text>
+                </label>
+              </div>
+            </ion-row>
+          </ion-list>
+
+          <ion-button class="blue-button" style="margin-top: 50px;" color="primary"
+            [disabled]="!overtimeform.valid || startDate == null || endDate == null" type="submit">Submit</ion-button>
+        </form>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,160 @@
+<ion-header>
+  <ion-toolbar style="z-index: 0;">
+    <ion-button slot="end" fill="clear" (click)="close()">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-light-grey">
+  <ion-row style="height: 100%;">
+    <ion-col class="ion-no-padding">
+      <div class="content" style="height: 100%;">
+        <form (ngSubmit)="onSubmit()" class="form" #secgroupdetailform="ngForm">
+          <ion-list *ngIf="type == 'Details'" style="height: 100%;">
+            <ion-row class="label-group">
+              <ion-label class="text-medium-red">*Required Field</ion-label>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <p-floatLabel class="hceazy-select">
+                <p-dropdown [options]="listAutority" ngModel [(ngModel)]="talentsParameter" name="talentsParameter"
+                  optionLabel="key" optionValue="key" inputId="float-label">
+                  <ng-template pTemplate="dropdownicon">
+                    <ion-icon name="caret-down-outline" style="color: black;"></ion-icon>
+                  </ng-template>
+                </p-dropdown>
+                <label for="float-label">Authority<ion-text color="danger">*</ion-text></label>
+              </p-floatLabel>
+            </ion-row>
+          </ion-list>
+
+          <ion-list *ngIf="type == 'Matrix'" style="height: 100%;">
+            <ion-row class="label-group">
+              <ion-label class="text-medium-red">*Required Field</ion-label>
+            </ion-row>
+
+            <ion-row style="margin-top: 10px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Name" name="name" ngModel
+                  [(ngModel)]="secGroupDetail.name" required="true" maxlength="40" />
+                <label class="hceazy-label" for="name">
+                  Name<ion-text color="danger">*</ion-text>
+                </label>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Work Location"
+                  name="worklocationName" ngModel [(ngModel)]="secGroupDetail.worklocationName" readonly="true"
+                  (click)="openSearchMenu('Work Location')" />
+                <label class="hceazy-label" for="worklocationName">
+                  Work Location
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Organization"
+                  name="organizationName" ngModel [(ngModel)]="secGroupDetail.organizationName" readonly="true"
+                  (click)="openSearchMenu('Organization')" />
+                <label class="hceazy-label" for="organizationName">
+                  Organization
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Job Title" name="jobTitleName"
+                  ngModel [(ngModel)]="secGroupDetail.jobTitleName" readonly="true"
+                  (click)="openSearchMenu('Job Title')" />
+                <label class="hceazy-label" for="jobTitleName">
+                  Job Title
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Position Level"
+                  name="positionLevelName" ngModel [(ngModel)]="secGroupDetail.positionLevelName" readonly="true"
+                  (click)="openSearchMenu('Position Level')" />
+                <label class="hceazy-label" for="positionLevelName">
+                  Position Level
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Grade" name="gradeName" ngModel
+                  [(ngModel)]="secGroupDetail.gradeName" readonly="true" (click)="openSearchMenu('Grade')" />
+                <label class="hceazy-label" for="gradeName">
+                  Grade
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="text" placeholder="Employee" name="employeeName"
+                  ngModel [(ngModel)]="secGroupDetail.employeeName" readonly="true"
+                  (click)="openSearchMenu('Approver')" />
+                <label class="hceazy-label" for="employeeName">
+                  Employee
+                </label>
+                <ion-icon slot="icon-only" name="search-outline" class="hceazy-icon-search"></ion-icon>
+              </div>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <p-floatLabel class="hceazy-select">
+                <p-dropdown [options]="listEmploymentStatus" ngModel [(ngModel)]="secGroupDetail.employmentStatus"
+                  name="role" optionLabel="title" optionValue="value" inputId="float-label">
+                  <ng-template pTemplate="dropdownicon">
+                    <ion-icon name="caret-down-outline" style="color: black;"></ion-icon>
+                  </ng-template>
+                </p-dropdown>
+                <label for="float-label">Employment Status</label>
+              </p-floatLabel>
+            </ion-row>
+
+            <ion-row style="margin-top: 20px;">
+              <p-floatLabel class="hceazy-select">
+                <p-dropdown [options]="listWorkLocationType" ngModel [(ngModel)]="secGroupDetail.worklocationType"
+                  name="role" optionLabel="title" optionValue="value" inputId="float-label">
+                  <ng-template pTemplate="dropdownicon">
+                    <ion-icon name="caret-down-outline" style="color: black;"></ion-icon>
+                  </ng-template>
+                </p-dropdown>
+                <label for="float-label">Work Location Type</label>
+              </p-floatLabel>
+            </ion-row>
+
+            <ion-row style="margin: 20px 0px;">
+              <div class="hceazy-input-wrapper">
+                <input autocomplete="off" class="hceazy-input" type="tel" placeholder="Length of Service (Month)"
+                  name="lengthOfService" ngModel [(ngModel)]="secGroupDetail.lengthOfService" maxlength="40" />
+                <label class="hceazy-label" for="lengthOfService">
+                  Length of Service (Month)
+                </label>
+              </div>
+            </ion-row>
+          </ion-list>
+
+          <ion-button class="blue-button" color="primary"
+            [disabled]="!secgroupdetailform.valid || (talentsParameter == null && type == 'Details')"
+            type="submit">Submit</ion-button>
+        </form>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>
