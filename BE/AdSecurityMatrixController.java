@@ -90,6 +90,10 @@ public class AdSecurityMatrixController extends GeneralSettingService {
         if (!optGrp.isPresent())
             throw new CustomGenericException("Group is Not Found!");
 
+        if ("Overtime".equalsIgnoreCase(optGrp.get().getGroupName())){
+            throw new CustomGenericException("Konfigurasi Matrix untuk modul Overtime telah dilewati otomatis");
+        }
+
         if (request.getWorklocationId()==null && request.getWorklocationType()==null
                 && request.getOrganizationId()==null && request.getJobTitleId()==null && request.getPositionLevelId()==null
                 && request.getEmployeeId()==null && request.getGradeId()==null)

@@ -26,6 +26,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.phincon.talents.app.model.hr.JobTitle;
+import com.phincon.talents.app.dao.JobTitleRepository; 
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -61,7 +63,9 @@ public class OvertimeService {
 	
 	@Autowired
 	WorkflowRepository workflowRepository;
-	
+
+	@Autowired
+	JobTitleRepository jobTitleRepository;
 
 	@Autowired
 	DataApprovalService dataApprovalService;
@@ -83,6 +87,21 @@ public class OvertimeService {
 		Optional<VwEmpAssignment> employeeViewOpt = vwEmpAssignmentRepository.findById(claimForEmployeeId);
 		if (employeeViewOpt.isPresent()) {
 			VwEmpAssignment employeeView = employeeViewOpt.get();
+
+			if(employeeView.getJobTitleId() != null){
+				Optional<JobTitle> jobTitleOpt = jobTitleRepository.findById(employeeView.getJobTitleId());
+				if (jobTitleOpt.isPresent()){
+					Integer flagOvt = jobTitleOpt.get().getFlagOvertime();
+					if(flagOvt == null || flagOvt == 0){
+						throw new CustomGenericException("Karyawan tidak eligible untuk Overtime");
+					}
+				} else {
+					throw new CustomGenericException("Data job title tidak ditemukan");
+				}
+			} else{
+				throw new CustomGenericException("Karyawan tidak memiliki job title");
+			}
+
 			Optional<RequestCategoryType> requestCategoryTypeOpt = requestCategoryTypeRepository.findByName("Overtime");
 			RequestCategoryType requestCategoryType = requestCategoryTypeOpt.get();
 			String categoryId = requestCategoryType.getId();

@@ -25,6 +25,9 @@ public class JobTitle extends AbstractEntityUUID {
 	@Column(name = "end_date")
 	private Date endDate;
 
+	@Column(name = "flag_overtime")
+	private Integer flagOvertime;
+
 	private String jobFamilyId;
 
 	private Integer contractMonth;
@@ -88,5 +91,12 @@ public class JobTitle extends AbstractEntityUUID {
 
 	public void setJobFamilyId(String jobFamilyId) {
 		this.jobFamilyId = jobFamilyId;
+	}
+
+	public Integer getFlagOvertime(){
+		return flagOvertime;
+	}
+	public void setFlagOvertime(Integer flagOvertime){
+		this.flagOvertime = flagOvertime;
 	}
 }
